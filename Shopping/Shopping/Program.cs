@@ -11,6 +11,8 @@ builder.Services.AddDbContext<DataContext>(o =>
         o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
 
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
 WebApplication? app = builder.Build();
 
 // Configure the HTTP request pipeline.

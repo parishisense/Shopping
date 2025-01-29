@@ -1,16 +1,20 @@
 ﻿
 
 using Shopping.Data.Entities;
+using Shopping.Enums;
+using Shopping.Helpers;
 
 namespace Shopping.Data
 {
     public class SeedDb
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public SeedDb(DataContext context)
+        public SeedDb(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
         public async Task SeedAsync()
@@ -18,6 +22,51 @@ namespace Shopping.Data
             _ = await _context.Database.EnsureCreatedAsync();
             await CheckCategoriesAsync();
             await CheckCountriesAsync();
+            await CheckRolesAsync();
+            await CheckUserAsync("0001", "Paris", "Bravo", "paris@yopmail.com", "56581111", "Calle Siempre Viva", UserType.Admin);
+           
+
+        }
+
+        private async Task<User> CheckUserAsync(
+
+            string document,
+            string firstName,
+            string lastName,
+            string email,
+            string phone,
+            string address,
+            UserType userType)
+
+
+        {
+            User user = await _userHelper.GetUserAsync(email);
+            if (user == null)
+            {
+                user = new User
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    UserName = email,
+                    PhoneNumber = phone,
+                    Address = address,
+                    Document = document,
+                    City = _context.Cities.FirstOrDefault(),
+                    UserType = userType,
+                };
+
+                await _userHelper.AddUserAsync(user, "123456");
+                await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+            }
+            return user;
+        }
+
+        private async Task CheckRolesAsync()
+        {
+            await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
+            await _userHelper.CheckRoleAsync(UserType.User.ToString());
+
         }
 
         private async Task CheckCountriesAsync()
@@ -29,7 +78,7 @@ namespace Shopping.Data
                     Name = "México",
                     States = new List<State>()
                     {
-                        new State {
+                        new() {
                             Name= "Michoacán",
                             Cities= new List<City>()
                             {
@@ -41,7 +90,7 @@ namespace Shopping.Data
                                 new() {Name= "Zurumutaro" },
                             }
                         },
-                        new State {
+                        new() {
                             Name= "Oaxaca",
                             Cities= new List<City>()
                             {
@@ -54,7 +103,7 @@ namespace Shopping.Data
                             }
                         },
 
-                                                new State {
+                                                new() {
                             Name= "Veracruz",
                             Cities= new List<City>()
                             {
@@ -67,7 +116,7 @@ namespace Shopping.Data
                             }
                         },
 
-                                                                        new State {
+                                                                        new() {
                             Name= "Yucatán",
                             Cities= new List<City>()
                             {
@@ -83,34 +132,34 @@ namespace Shopping.Data
                     }
                 });
 
-                _context.Countries.Add(new Country
+                _ = _context.Countries.Add(new Country
                 {
                     Name = "Estados Unidos",
                     States = new List<State>()
                     {
-                        new State()
+                        new()
                         {
                             Name="Florida",
                             Cities = new List<City>()
                             {
-                                new City() { Name="Orlando"},
-                                new City() { Name="Miami"},
-                                new City() { Name="Tampa"},
-                                new City() { Name="Fort Lauderdale"},
-                                new City() { Name="Key West"},
+                                new() { Name="Orlando"},
+                                new() { Name="Miami"},
+                                new() { Name="Tampa"},
+                                new() { Name="Fort Lauderdale"},
+                                new() { Name="Key West"},
 
                             }
                         },
-                        new State ()
+                        new()
                         {
                             Name="Texas",
                             Cities= new List<City>()
                             {
-                                new City() { Name="Houston"},
-                                new City() { Name="San Antonio"},
-                                new City() { Name="Dallas"},
-                                new City() { Name="Austin"},
-                                new City() { Name="El Paso"},
+                                new() { Name="Houston"},
+                                new() { Name="San Antonio"},
+                                new() { Name="Dallas"},
+                                new() { Name="Austin"},
+                                new() { Name="El Paso"},
                             }
 
                     },
@@ -118,7 +167,7 @@ namespace Shopping.Data
                 });
             }
 
-            await _context.SaveChangesAsync();
+            _ = await _context.SaveChangesAsync();
         }
 
 

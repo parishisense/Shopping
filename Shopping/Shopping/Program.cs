@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
 using Shopping.Data;
+using Shopping.Data.Entities;
 using Shopping.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,19 +14,27 @@ builder.Services.AddDbContext<DataContext>(o =>
     o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+//TODO: Make Strongest Pasword
+builder.Services.AddIdentity<User, IdentityRole>(cfg =>
+{
+    cfg.User.RequireUniqueEmail = true;
+    cfg.Password.RequireDigit = false;
+    cfg.Password.RequiredUniqueChars = 0;
+    cfg.Password.RequireLowercase = false;
+    cfg.Password.RequireNonAlphanumeric = false;
+    cfg.Password.RequireUppercase = false;
+
+}).AddEntityFrameworkStores<DataContext>();
+
 //Para efectos practicos de este ejercicio usaremos TRansient
 //Transient solo se inyecta una vez y lo destruye cuando ya no lo necesite
 builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<IUserHelper, UserHelper>();
-
 //La gan mayoria en la vida son Scoped
 //Se inyecta cada vez que se necesita y se destruye cuando se deja de usar
 //builder.Services.AddScoped<SeedDb>();
-
 //Inyecta una vez y no lo destruye es decir, lo deja en memoria
 //builder.Services.AddSingleton<SeedDb>();
-
-
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 var app = builder.Build();
@@ -51,6 +61,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",

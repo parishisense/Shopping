@@ -26,6 +26,13 @@ builder.Services.AddIdentity<User, IdentityRole>(cfg =>
 
 }).AddEntityFrameworkStores<DataContext>();
 
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/NotAuthorized";
+    options.AccessDeniedPath = "/Account/NotAuthorized";
+});
+
 //Para efectos practicos de este ejercicio usaremos TRansient
 //Transient solo se inyecta una vez y lo destruye cuando ya no lo necesite
 builder.Services.AddTransient<SeedDb>();
@@ -58,6 +65,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

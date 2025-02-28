@@ -24,7 +24,7 @@ namespace Shopping.Data
             await CheckCountriesAsync();
             await CheckRolesAsync();
             await CheckUserAsync("0001", "Paris", "Bravo", "paris@yopmail.com", "56581111", "Calle Siempre Viva", UserType.Admin);
-           
+            await CheckUserAsync("0002", "Graciela", "Garcia", "graciela@yopmail.com", "56581112", "Calle Siempre Viva", UserType.User);
 
         }
 

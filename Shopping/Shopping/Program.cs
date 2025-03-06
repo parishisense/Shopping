@@ -37,6 +37,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 //Transient solo se inyecta una vez y lo destruye cuando ya no lo necesite
 builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<IUserHelper, UserHelper>();
+builder.Services.AddScoped<ICombosHelper, CombosHelper>();
 //La gan mayoria en la vida son Scoped
 //Se inyecta cada vez que se necesita y se destruye cuando se deja de usar
 //builder.Services.AddScoped<SeedDb>();

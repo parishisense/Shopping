@@ -39,7 +39,7 @@ namespace Shopping.Models
             : $"https://shoppingparis.blob.core.windows.net/users/{ImageId}";
 
         [Display(Name ="Image")]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
 
         [Display(Name ="Pais")]
         [Range(1, int.MaxValue, ErrorMessage ="Debes Seleccionar un País")]

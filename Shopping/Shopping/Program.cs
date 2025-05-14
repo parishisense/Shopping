@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics.Internal;
 using Shopping.Data;
 using Shopping.Data.Entities;
 using Shopping.Helpers;
@@ -38,6 +37,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddScoped<ICombosHelper, CombosHelper>();
+builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 //La gan mayoria en la vida son Scoped
 //Se inyecta cada vez que se necesita y se destruye cuando se deja de usar
 //builder.Services.AddScoped<SeedDb>();
@@ -50,10 +50,10 @@ var app = builder.Build();
 SeedData();
 void SeedData()
 {
-    IServiceScopeFactory? scopedFactory= app.Services.GetService<IServiceScopeFactory>();
+    IServiceScopeFactory? scopedFactory = app.Services.GetService<IServiceScopeFactory>();
     using (IServiceScope? scope = scopedFactory.CreateScope())
     {
-        SeedDb? service= scope.ServiceProvider.GetService<SeedDb?>();
+        SeedDb? service = scope.ServiceProvider.GetService<SeedDb?>();
         service.SeedAsync().Wait();
     }
 }

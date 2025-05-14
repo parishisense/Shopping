@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shopping.Data.Entities
 {
@@ -15,6 +16,8 @@ namespace Shopping.Data.Entities
 
 
         //Con esta linea relacionas 
+        //Jsonignore sirve para deserializar
+        [JsonIgnore]
         public Country Country{ get; set; }
 
         public ICollection<City> Cities { get; set; }

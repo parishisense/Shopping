@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
@@ -14,9 +13,11 @@ namespace Shopping.Controllers
     {
         private readonly DataContext _context;
 
+
         public CategoriesController(DataContext context)
         {
-            this._context = context;
+            _context = context;
+
         }
 
 
@@ -165,6 +166,11 @@ namespace Shopping.Controllers
             _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+
+
+
     }
 
 }

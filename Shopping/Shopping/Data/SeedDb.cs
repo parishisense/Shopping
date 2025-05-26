@@ -29,7 +29,7 @@ namespace Shopping.Data
             await CheckProductsAsync();
             await CheckUserAsync("0001", "Paris", "Bravo", "paris@yopmail.com", "56581111", "Calle Siempre Viva", "YOPE2.jpg", UserType.Admin);
             await CheckUserAsync("0002", "Graciela", "Garcia", "graciela@yopmail.com", "56581112", "Calle Siempre Viva", "Chelita1.jpg", UserType.User);
-            await CheckUserAsync("0003", "Juliet", "Torres", "juliet@yopmail.com", "322 311 8880", "Calle Luna Calle Sol", "Yuliett.jpg", UserType.Admin);
+            await CheckUserAsync("0003", "Juliet", "Torres", "juliet@yopmail.com", "322 311 8880", "Calle Luna Calle Sol", "Yuliett.jpeg", UserType.Admin);
             await CheckUserAsync("0004", "Chelita", "Garcia", "chelita@yopmail.com", "322 311 66620", "Calle Luna Calle Sol", "Chela.jpg", UserType.User);
             await CheckUserAsync("0005", "Ariel", "Acevedo", "Ariel@yopmail.com", "322 311 3330", "Calle Luna Calle Sol", "Ariel.jpg", UserType.User);
             await CheckUserAsync("0006", "Miguel", "Vichy", "miguel@yopmail.com", "322 311 1110", "Calle Luna Calle Sol", "miguel.jpg", UserType.User);

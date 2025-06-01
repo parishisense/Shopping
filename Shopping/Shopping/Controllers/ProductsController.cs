@@ -263,7 +263,9 @@ namespace Shopping.Controllers
             {
                 return NotFound();
             }
-            List<Category> categories = product.ProductCategories.Select(pc => new Category
+            List<Category> categories = product.ProductCategories
+                .Where(pc => pc.Category != null)
+                .Select(pc => new Category
             {
                 Id = pc.Category.Id,
                 Name = pc.Category.Name,

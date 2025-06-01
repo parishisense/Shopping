@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shopping.Data;
 using Shopping.Data.Entities;
 using Shopping.Helpers;
 using Shopping.Models;
-using System.Diagnostics;
 
 namespace Shopping.Controllers
 {
@@ -91,8 +91,87 @@ namespace Shopping.Controllers
                 User = user
             };
 
-            _context.TemporalSales.Add(temporalSale);
-            await _context.SaveChangesAsync();
+            _ = _context.TemporalSales.Add(temporalSale);
+            _ = await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Product product = await _context.Products
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductCategories)
+                .ThenInclude(pc => pc.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            string categories = string.Empty;
+            foreach (ProductCategory category in product.ProductCategories)
+            {
+                if (category.Category != null)
+                {
+                    categories += $"{category.Category.Name}, ";
+                }
+            }
+            if (categories.Length > 2)
+            {
+                categories = categories.Substring(0, categories.Length - 2);
+            }
+
+
+            AddProductToCartViewModel model = new()
+            {
+                Categories = categories,
+                Description = product.Description,
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                ProductImages = product.ProductImages,
+                Quantity = 1,
+                Stock = product.Stock,
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Details(AddProductToCartViewModel model)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            Product product = await _context.Products.FindAsync(model.Id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            TemporalSale temporalSale = new()
+            {
+                Product = product,
+                Quantity = model.Quantity,
+                Remarks = model.Remarks,
+                User = user
+            };
+
+            _ = _context.TemporalSales.Add(temporalSale);
+            _ = await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

@@ -46,6 +46,7 @@ builder.Services.AddScoped<IUserHelper, UserHelper>();
 builder.Services.AddScoped<ICombosHelper, CombosHelper>();
 builder.Services.AddScoped<IBlobHelper, BlobHelper>();
 builder.Services.AddScoped<IMailHelper, MailHelper>();
+builder.Services.AddScoped<IOrdersHelper, OrdersHelper>();
 //La gan mayoria en la vida son Scoped
 //Se inyecta cada vez que se necesita y se destruye cuando se deja de usar
 //builder.Services.AddScoped<SeedDb>();

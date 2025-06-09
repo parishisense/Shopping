@@ -36,19 +36,7 @@ namespace Shopping.Controllers
 
 
 
-        // GET: Categories/Details/5
-        [HttpGet]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Categories == null)
-            {
-                return NotFound();
-            }
 
-            Category? category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            return category == null ? NotFound() : View(category);
-        }
 
         [NoDirectAccess]
         public async Task<IActionResult> Delete(int? id)
